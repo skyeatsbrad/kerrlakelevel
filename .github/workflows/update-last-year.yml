@@ -1,0 +1,36 @@
+name: Update Last Year Data
+
+on:
+  schedule:
+    # 1st of every month at 6:00 AM UTC
+    - cron: '0 6 1 * *'
+  workflow_dispatch: # allow manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fetch last year data from USGS
+        run: node scripts/update-last-year.js
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git diff --quiet app.js && echo "No changes" && exit 0
+          git add app.js
+          git commit -m "chore: update last year elevation data
+
+          Auto-updated LAST_YEAR_BY_MONTH from USGS API.
+
+          Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>"
+          git push
