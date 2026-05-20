@@ -3,24 +3,29 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)" />
-<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#0B1120" media="(prefers-color-scheme: dark)" />
+<meta name="theme-color" content="#F8FAFC" media="(prefers-color-scheme: light)" />
 <meta name="description" content="Live Kerr Lake (John H. Kerr Reservoir) water level, 30-day trend, boat ramp accessibility, and Clarksville VA weather forecast. Updated every 15 minutes from USGS." />
 <title>Kerr Lake Level — Live Water Level &amp; Ramp Status</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-<link rel="stylesheet" href="style.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="preconnect" href="https://waterservices.usgs.gov" />
 <link rel="preconnect" href="https://api.open-meteo.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
+<div class="bg-aurora" aria-hidden="true"></div>
+
 <header class="site-header">
-  <div class="brand">
+  <a class="brand" href="/" aria-label="kerrlakelevel.com home">
     <svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true">
       <path d="M12 2.5s-6 7-6 11.5a6 6 0 0 0 12 0c0-4.5-6-11.5-6-11.5z"/>
     </svg>
-    <span>kerrlakelevel<span class="brand-dot">.com</span></span>
-  </div>
+    <span class="brand-name"><span class="brand-accent">kerrlakelevel</span><span class="brand-dot">.com</span></span>
+  </a>
   <button id="refreshBtn" class="refresh-btn" aria-label="Refresh data">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.65 6.35A7.95 7.95 0 0 0 12 4a8 8 0 1 0 7.74 10h-2.08A6 6 0 1 1 12 6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
   </button>
@@ -54,6 +59,7 @@
     <div id="statusMessage" class="status-message">Fetching latest reading…</div>
 
     <div class="meta-row">
+      <span class="live-dot" aria-hidden="true"></span>
       <span id="updatedAt" class="updated">—</span>
       <span class="dot-sep">·</span>
       <span class="auto-note">Auto-refreshes every 15 min</span>
