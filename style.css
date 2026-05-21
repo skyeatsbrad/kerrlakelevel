@@ -825,31 +825,30 @@ main > .card:nth-child(6) { animation-delay: 375ms; }
 }
 
 /* ---------- Fishing Report ---------- */
-.fishing-card .card-header { margin-bottom: 14px; }
+.fishing-card .card-header { margin-bottom: 10px; }
 
 .fishing-overview {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 16px 24px;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: 12px 20px;
 }
 
 .fishing-rating {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  align-items: center;
+  gap: 10px;
   min-width: 0;
 }
 .fishing-stars {
-  font-size: 22px;
-  letter-spacing: 2px;
+  font-size: 20px;
+  letter-spacing: 1px;
   line-height: 1;
 }
 .fishing-stars .stars-filled { color: #FBBF24; }
 .fishing-stars .stars-empty { color: var(--text-tertiary); opacity: 0.5; }
 .fishing-label {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.08em;
   color: var(--text-secondary);
@@ -858,23 +857,22 @@ main > .card:nth-child(6) { animation-delay: 375ms; }
 .fishing-conditions {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  flex: 1 1 320px;
-  justify-content: flex-end;
+  gap: 5px;
+  justify-content: flex-start;
 }
 .cond-pill {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
-  font-size: 12px;
+  gap: 4px;
+  padding: 4px 8px;
+  font-size: 11px;
   border-radius: 999px;
   background: var(--bg-elevated);
   border: 1px solid var(--border-subtle);
   color: var(--text-secondary);
   white-space: nowrap;
 }
-.cond-pill .cond-icon { font-size: 13px; line-height: 1; }
+.cond-pill .cond-icon { font-size: 12px; line-height: 1; }
 .cond-pill strong { color: var(--text-primary); font-weight: 600; }
 .cond-pill.cond-good { border-color: rgba(52, 211, 153, 0.35); background: var(--status-good-bg); }
 .cond-pill.cond-bad  { border-color: rgba(248, 113, 113, 0.35); background: var(--status-danger-bg); }
@@ -882,36 +880,33 @@ main > .card:nth-child(6) { animation-delay: 375ms; }
 .cond-pill.cond-bad  strong { color: var(--status-danger); }
 
 .fishing-windows {
-  margin-top: 14px;
-  padding: 10px 14px;
+  margin-top: 10px;
+  padding: 8px 12px;
   background: var(--bg-elevated);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  gap: 20px;
 }
 .fw-row {
   display: flex;
-  flex-wrap: wrap;
   align-items: baseline;
-  gap: 10px;
-  font-size: 13px;
+  gap: 8px;
+  font-size: 12px;
 }
 .fw-label {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--text-tertiary);
-  min-width: 90px;
 }
 .fw-times { color: var(--text-primary); font-variant-numeric: tabular-nums; }
 
 .fishing-species-details {
-  margin-top: 14px;
+  margin-top: 10px;
   border-top: 1px solid var(--border-subtle);
-  padding-top: 12px;
+  padding-top: 10px;
 }
 .fishing-species-details > summary {
   list-style: none;
@@ -921,44 +916,44 @@ main > .card:nth-child(6) { animation-delay: 375ms; }
 }
 .fishing-species-details > summary::-webkit-details-marker { display: none; }
 .fishing-species-details .summary-title h3 {
-  font-size: 16px;
+  font-size: 14px;
   margin: 0;
 }
 .fishing-species-details[open] .chev { transform: rotate(180deg); }
 
 .fishing-species {
-  margin-top: 12px;
+  margin-top: 10px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
 }
 .species-card {
-  padding: 12px;
+  padding: 10px;
   background: var(--bg-elevated);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 .species-head {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
-.species-icon { font-size: 18px; line-height: 1; }
+.species-icon { font-size: 16px; line-height: 1; }
 .species-name {
   font-weight: 600;
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text-primary);
 }
 .activity-bar {
   display: inline-flex;
-  gap: 3px;
+  gap: 2px;
 }
 .act-cell {
-  width: 22px;
-  height: 6px;
+  width: 18px;
+  height: 5px;
   border-radius: 2px;
   background: var(--border-subtle);
 }
@@ -966,25 +961,31 @@ main > .card:nth-child(6) { animation-delay: 375ms; }
 .act-cell.act-med  { background: var(--status-warn); }
 .act-cell.act-low  { background: var(--status-danger); }
 .species-meta {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-secondary);
 }
 .species-meta .meta-key {
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--text-tertiary);
-  margin-right: 4px;
+  margin-right: 3px;
 }
 .species-tech {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-secondary);
-  line-height: 1.45;
+  line-height: 1.4;
 }
 
+@media (max-width: 900px) {
+  .fishing-species { grid-template-columns: repeat(3, 1fr); }
+}
 @media (max-width: 600px) {
-  .fishing-overview { flex-direction: column; align-items: flex-start; }
-  .fishing-conditions { justify-content: flex-start; }
-  .fw-label { min-width: 0; flex-basis: 100%; }
+  .fishing-overview { grid-template-columns: 1fr; }
+  .fishing-windows { flex-direction: column; gap: 4px; }
+  .fishing-species { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 400px) {
+  .fishing-species { grid-template-columns: 1fr; }
 }
