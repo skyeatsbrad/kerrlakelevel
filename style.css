@@ -51,7 +51,7 @@
   --t-base:     0.3s var(--ease);
   --t-slow:     0.6s var(--ease);
 
-  --maxw:       1400px;
+  --maxw:       min(92vw, 1400px);
 }
 
 /* ---------- Light mode ---------- */
