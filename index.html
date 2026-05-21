@@ -96,21 +96,33 @@
     </div>
   </section>
 
-  <!-- CHART -->
-  <section class="card chart-card">
-    <div class="card-header">
-      <h2>30-Day Trend</h2>
-      <span class="sub">Elevation vs. 300 ft full pool</span>
-    </div>
-    <div class="chart-wrap">
-      <canvas id="chart30" height="150" aria-label="30-day water level chart"></canvas>
-      <div id="chartLoading" class="chart-loading">Loading chart…</div>
-    </div>
-  </section>
+  <!-- CHART + WEATHER ROW -->
+  <div class="two-col-row">
+    <section class="card chart-card">
+      <div class="card-header">
+        <h2>30-Day Trend</h2>
+        <span class="sub">Elevation vs. 300 ft full pool</span>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="chart30" height="150" aria-label="30-day water level chart"></canvas>
+        <div id="chartLoading" class="chart-loading">Loading chart…</div>
+      </div>
+    </section>
+
+    <section class="card weather-card">
+      <div class="card-header">
+        <h2>7-Day Forecast</h2>
+        <span class="sub">Clarksville, VA</span>
+      </div>
+      <div id="weather" class="weather-grid">
+        <div class="weather-loading">Loading forecast…</div>
+      </div>
+    </section>
+  </div>
 
   <!-- RAMPS -->
   <section class="card ramps-card">
-    <details id="rampsDetails" open>
+    <details id="rampsDetails">
       <summary>
         <span class="summary-title">
           <h2>Boat Ramp Status</h2>
@@ -124,17 +136,6 @@
         wind, and dock conditions vary.
       </p>
     </details>
-  </section>
-
-  <!-- WEATHER -->
-  <section class="card weather-card">
-    <div class="card-header">
-      <h2>7-Day Forecast</h2>
-      <span class="sub">Clarksville, VA</span>
-    </div>
-    <div id="weather" class="weather-grid">
-      <div class="weather-loading">Loading forecast…</div>
-    </div>
   </section>
 
   <!-- WEBCAMS -->

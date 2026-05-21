@@ -210,7 +210,7 @@ main {
   padding: 8px 20px 40px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 14px;
 }
 
 /* ---------- Cards (glassmorphism) ---------- */
@@ -543,6 +543,20 @@ main > .card:nth-child(6) { animation-delay: 375ms; }
   color: var(--text-tertiary); font-size: 13px;
 }
 
+/* ---------- Two-column row ---------- */
+.two-col-row {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 14px;
+}
+.two-col-row .card { margin: 0; }
+.two-col-row .weather-grid {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+@media (max-width: 900px) {
+  .two-col-row { grid-template-columns: 1fr; }
+}
+
 /* ---------- Ramps ---------- */
 .ramps-card details > summary {
   list-style: none;
@@ -740,7 +754,7 @@ main > .card:nth-child(6) { animation-delay: 375ms; }
 
 /* ---------- Larger screens ---------- */
 @media (min-width: 640px) {
-  main { padding: 12px 24px 48px; gap: 24px; }
+  main { padding: 12px 24px 48px; gap: 14px; }
   .card { padding: 2rem; }
   .site-header { padding: 24px 28px; }
 }
@@ -793,7 +807,8 @@ main > .card:nth-child(6) { animation-delay: 375ms; }
 .webcam-frame {
   position: relative;
   width: 100%;
-  padding-bottom: 56.25%; /* 16:9 */
+  padding-bottom: 45%; /* shorter than 16:9 */
+  max-height: 260px;
   border-radius: 12px;
   overflow: hidden;
   background: var(--bg-base);
