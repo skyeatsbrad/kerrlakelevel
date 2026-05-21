@@ -40,6 +40,23 @@
       <span id="provisionalBadge" class="badge badge-prov hidden">Provisional</span>
     </div>
 
+    <!-- Inline comparisons (top-right on desktop) -->
+    <div class="hero-compare">
+      <div class="compare-grid">
+        <div class="compare-item">
+          <div class="compare-label">Last year, this date</div>
+          <div class="compare-value" id="lastYearValue">—</div>
+          <div class="compare-delta" id="lastYearDelta">&nbsp;</div>
+        </div>
+        <div class="compare-item">
+          <div class="compare-label">Hist. avg for <span id="monthName">this month</span></div>
+          <div class="compare-value" id="monthAvgValue">—</div>
+          <div class="compare-delta" id="monthAvgDelta">&nbsp;</div>
+        </div>
+      </div>
+      <div class="seasonal-note" id="seasonalNote"></div>
+    </div>
+
     <div id="bigNumber" class="big-number">
       <span class="loading-shimmer">— .—</span>
     </div>
@@ -77,23 +94,6 @@
         <span>310 ft<br><small>flood</small></span>
       </div>
     </div>
-  </section>
-
-  <!-- COMPARISONS -->
-  <section class="card compare-card">
-    <div class="compare-grid">
-      <div class="compare-item">
-        <div class="compare-label">Last year, this date</div>
-        <div class="compare-value" id="lastYearValue">—</div>
-        <div class="compare-delta" id="lastYearDelta">&nbsp;</div>
-      </div>
-      <div class="compare-item">
-        <div class="compare-label">Historical avg for <span id="monthName">this month</span></div>
-        <div class="compare-value" id="monthAvgValue">—</div>
-        <div class="compare-delta" id="monthAvgDelta">&nbsp;</div>
-      </div>
-    </div>
-    <div class="seasonal-note" id="seasonalNote"></div>
   </section>
 
   <!-- CHART -->

@@ -456,17 +456,24 @@ main > .card:nth-child(6) { animation-delay: 375ms; }
   letter-spacing: 0.05em;
 }
 
-/* ---------- Compare ---------- */
+/* ---------- Compare (inline in hero) ---------- */
+.hero-compare {
+  position: relative;
+  float: right;
+  max-width: 280px;
+  margin: -4px 0 12px 20px;
+}
+
 .compare-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  grid-template-columns: 1fr;
+  gap: 8px;
 }
 .compare-item {
   background: var(--bg-elevated);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  padding: 16px;
+  padding: 10px 12px;
   transition: border-color var(--t-base), transform var(--t-base);
 }
 .compare-item:hover {
@@ -474,15 +481,15 @@ main > .card:nth-child(6) { animation-delay: 375ms; }
   transform: translateY(-1px);
 }
 .compare-label {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--text-tertiary);
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   font-weight: 600;
 }
 .compare-value {
-  font-size: 26px;
+  font-size: 20px;
   font-weight: 700;
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
@@ -490,8 +497,8 @@ main > .card:nth-child(6) { animation-delay: 375ms; }
   line-height: 1.1;
 }
 .compare-delta {
-  font-size: 12px;
-  margin-top: 6px;
+  font-size: 11px;
+  margin-top: 3px;
   color: var(--text-tertiary);
   font-weight: 500;
   font-variant-numeric: tabular-nums;
@@ -500,16 +507,25 @@ main > .card:nth-child(6) { animation-delay: 375ms; }
 .compare-delta.down { color: var(--status-danger); }
 
 .seasonal-note {
-  margin-top: 16px;
-  font-size: 13px;
+  margin-top: 8px;
+  font-size: 11px;
   color: var(--text-secondary);
-  padding: 12px 14px;
+  padding: 8px 10px;
   background: var(--status-info-bg);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  line-height: 1.55;
+  line-height: 1.45;
 }
-@media (max-width: 480px) {
+
+@media (max-width: 600px) {
+  .hero-compare {
+    float: none;
+    max-width: 100%;
+    margin: 0 0 16px 0;
+  }
+  .compare-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 380px) {
   .compare-grid { grid-template-columns: 1fr; }
 }
 
