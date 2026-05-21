@@ -95,6 +95,10 @@
   const poolFill = $('poolBarFill');
   const poolMarker = $('poolBarMarker');
   const chartLoading = $('chartLoading');
+  const fishingRatingEl = $('fishingRating');
+  const fishingConditionsEl = $('fishingConditions');
+  const fishingWindowsEl = $('fishingWindows');
+  const fishingSpeciesEl = $('fishingSpecies');
 
   yearEl.textContent = new Date().getFullYear();
 
@@ -526,7 +530,292 @@
     }
   }
 
-  // ---------- Main load ----------
+  // ---------- Fishing ----------
+  const FISH_SPECIES = [
+    {
+      name: 'Striped Bass',
+      icon: '🐟',
+      seasons: {
+        spring: { activity: 4, depth: '15-30 ft', technique: 'Live bait, umbrella rigs near points' },
+        summer: { activity: 3, depth: '25-45 ft', technique: 'Downlines, planer boards over deep humps' },
+        fall:   { activity: 5, depth: '10-30 ft', technique: 'Topwater blitzes, casting to surfacing fish' },
+        winter: { activity: 3, depth: '30-50 ft', technique: 'Slow jigging, live bait near dam' }
+      },
+      conditions: { risingWater: 1, fallingWater: -1, lowPressure: 1, rain: 0 }
+    },
+    {
+      name: 'Largemouth Bass',
+      icon: '🐟',
+      seasons: {
+        spring: { activity: 5, depth: '2-10 ft',  technique: 'Spinnerbaits, jerkbaits near spawning flats' },
+        summer: { activity: 4, depth: '8-20 ft',  technique: 'Deep cranks, Texas rigs, topwater at dawn' },
+        fall:   { activity: 5, depth: '5-15 ft',  technique: 'Crankbaits, jigs on creek channels' },
+        winter: { activity: 2, depth: '15-30 ft', technique: 'Jigs, blade baits, slow presentations' }
+      },
+      conditions: { risingWater: 2, fallingWater: -1, lowPressure: 1, rain: 1 }
+    },
+    {
+      name: 'Crappie',
+      icon: '🐟',
+      seasons: {
+        spring: { activity: 5, depth: '3-8 ft',   technique: 'Minnows or jigs around brush piles, docks' },
+        summer: { activity: 3, depth: '12-20 ft', technique: 'Vertical jigging over deep structure' },
+        fall:   { activity: 4, depth: '8-15 ft',  technique: 'Minnows near creek mouths, bridge pilings' },
+        winter: { activity: 3, depth: '15-25 ft', technique: 'Slow minnow presentations, deep brush' }
+      },
+      conditions: { risingWater: 1, fallingWater: -1, lowPressure: 0, rain: 0 }
+    },
+    {
+      name: 'Catfish',
+      icon: '🐱',
+      seasons: {
+        spring: { activity: 4, depth: '5-15 ft',  technique: 'Cut bait on flats, near creek mouths' },
+        summer: { activity: 5, depth: '8-25 ft',  technique: 'Night fishing, cut shad, channel edges' },
+        fall:   { activity: 4, depth: '10-20 ft', technique: 'Cut bait near baitfish schools' },
+        winter: { activity: 2, depth: '20-35 ft', technique: 'Deep holes, slow presentations' }
+      },
+      conditions: { risingWater: 2, fallingWater: 0, lowPressure: 2, rain: 2 }
+    },
+    {
+      name: 'Walleye',
+      icon: '🐟',
+      seasons: {
+        spring: { activity: 4, depth: '5-15 ft',  technique: 'Jerkbaits, crawler harnesses near rocky points' },
+        summer: { activity: 3, depth: '15-30 ft', technique: 'Deep trolling, bottom bouncers at night' },
+        fall:   { activity: 4, depth: '10-25 ft', technique: 'Crankbaits on main-lake points' },
+        winter: { activity: 3, depth: '20-40 ft', technique: 'Jigging spoons, blade baits near dam' }
+      },
+      conditions: { risingWater: 0, fallingWater: 0, lowPressure: 1, rain: 0 }
+    }
+  ];
+
+  function getMoonPhase(date) {
+    const knownNew = new Date('2000-01-06T18:14:00Z');
+    const LUNAR_CYCLE = 29.53058867;
+    const daysSince = (date - knownNew) / 86400000;
+    const phase = ((daysSince % LUNAR_CYCLE) + LUNAR_CYCLE) % LUNAR_CYCLE / LUNAR_CYCLE;
+    const illumination = Math.round((1 - Math.cos(phase * 2 * Math.PI)) / 2 * 100);
+
+    let name;
+    if (phase < 0.0625) name = 'New Moon';
+    else if (phase < 0.1875) name = 'Waxing Crescent';
+    else if (phase < 0.3125) name = 'First Quarter';
+    else if (phase < 0.4375) name = 'Waxing Gibbous';
+    else if (phase < 0.5625) name = 'Full Moon';
+    else if (phase < 0.6875) name = 'Waning Gibbous';
+    else if (phase < 0.8125) name = 'Last Quarter';
+    else if (phase < 0.9375) name = 'Waning Crescent';
+    else name = 'New Moon';
+
+    return { phase, name, illumination };
+  }
+
+  function moonEmoji(name) {
+    return ({
+      'New Moon':         '🌑',
+      'Waxing Crescent':  '🌒',
+      'First Quarter':    '🌓',
+      'Waxing Gibbous':   '🌔',
+      'Full Moon':        '🌕',
+      'Waning Gibbous':   '🌖',
+      'Last Quarter':     '🌗',
+      'Waning Crescent':  '🌘'
+    })[name] || '🌙';
+  }
+
+  function getSolunarPeriods(date) {
+    const moon = getMoonPhase(date);
+    const baseHour = (moon.phase * 24.8) % 24;
+    const major1Start = baseHour;
+    const major2Start = (baseHour + 12.4) % 24;
+    const minor1Start = (baseHour + 6.2) % 24;
+    const minor2Start = (baseHour + 18.6) % 24;
+
+    const fmt = (h) => {
+      const hr = Math.floor(h);
+      const min = Math.round((h - hr) * 60);
+      const ampm = hr >= 12 ? 'PM' : 'AM';
+      const h12 = hr === 0 ? 12 : hr > 12 ? hr - 12 : hr;
+      return `${h12}:${String(min).padStart(2,'0')} ${ampm}`;
+    };
+
+    return {
+      major: [
+        { start: fmt(major1Start), end: fmt((major1Start + 2) % 24) },
+        { start: fmt(major2Start), end: fmt((major2Start + 2) % 24) }
+      ],
+      minor: [
+        { start: fmt(minor1Start), end: fmt((minor1Start + 1) % 24) },
+        { start: fmt(minor2Start), end: fmt((minor2Start + 1) % 24) }
+      ]
+    };
+  }
+
+  function computeFishingScore(conditions) {
+    let score = 50;
+
+    if (conditions.pressure != null) {
+      if (conditions.pressure < 1005) score += 12;
+      else if (conditions.pressure < 1010) score += 6;
+      else if (conditions.pressure > 1020) score -= 8;
+    }
+
+    if (conditions.windSpeed != null) {
+      if (conditions.windSpeed >= 5 && conditions.windSpeed <= 15) score += 10;
+      else if (conditions.windSpeed < 3) score += 2;
+      else if (conditions.windSpeed > 20) score -= 15;
+    }
+
+    if (conditions.waterTrend === 'rising') score += 10;
+    else if (conditions.waterTrend === 'stable') score += 5;
+    else if (conditions.waterTrend === 'falling') score -= 5;
+
+    if (conditions.rainLast3Days != null) {
+      if (conditions.rainLast3Days > 0 && conditions.rainLast3Days <= 2) score += 10;
+      else if (conditions.rainLast3Days > 2) score += 5;
+    }
+
+    const mp = conditions.moonPhase;
+    if (mp != null) {
+      if (mp < 0.0625 || mp > 0.9375 || (mp > 0.4375 && mp < 0.5625)) score += 12;
+      else if ((mp > 0.1875 && mp < 0.3125) || (mp > 0.6875 && mp < 0.8125)) score += 6;
+    }
+
+    if (conditions.season === 'spring' || conditions.season === 'fall') score += 8;
+    else if (conditions.season === 'summer') score += 4;
+
+    score = Math.max(0, Math.min(100, score));
+    const stars = Math.max(1, Math.min(5, Math.round(score / 20)));
+    const labels = ['Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
+    return { score, stars, label: labels[stars - 1] };
+  }
+
+  function activityBar(level) {
+    let cells = '';
+    for (let i = 1; i <= 5; i++) {
+      let cls = 'act-cell';
+      if (i <= level) {
+        if (level >= 4) cls += ' act-high';
+        else if (level === 3) cls += ' act-med';
+        else cls += ' act-low';
+      }
+      cells += `<span class="${cls}"></span>`;
+    }
+    return `<span class="activity-bar" aria-label="Activity ${level} of 5">${cells}</span>`;
+  }
+
+  function renderFishing(conditions) {
+    const season = conditions.season;
+    const moon = conditions.moon || getMoonPhase(new Date());
+    const hasWeather = conditions.pressure != null || conditions.windSpeed != null;
+
+    // Score
+    const { stars, label } = computeFishingScore({
+      pressure: conditions.pressure,
+      windSpeed: conditions.windSpeed,
+      waterTrend: conditions.waterTrend,
+      rainLast3Days: conditions.rainLast3Days,
+      moonPhase: moon.phase,
+      season
+    });
+
+    // Rating
+    const filled = '⭐'.repeat(stars);
+    const empty = '☆'.repeat(5 - stars);
+    fishingRatingEl.innerHTML = `
+      <span class="fishing-stars" aria-label="${stars} of 5 stars">
+        <span class="stars-filled">${filled}</span><span class="stars-empty">${empty}</span>
+      </span>
+      <span class="fishing-label">${label.toUpperCase()}</span>
+    `;
+
+    // Condition badges
+    const badges = [];
+    if (conditions.pressure != null) {
+      let pCls = 'cond-neutral', pNote = 'Steady';
+      if (conditions.pressure < 1005) { pCls = 'cond-good'; pNote = 'Low'; }
+      else if (conditions.pressure < 1010) { pCls = 'cond-good'; pNote = 'Falling'; }
+      else if (conditions.pressure > 1020) { pCls = 'cond-bad'; pNote = 'High'; }
+      badges.push(`<span class="cond-pill ${pCls}"><span class="cond-icon">📊</span><span class="cond-text"><strong>${conditions.pressure.toFixed(0)} hPa</strong> · ${pNote}</span></span>`);
+    }
+    if (conditions.windSpeed != null) {
+      let wCls = 'cond-neutral', wNote = 'Light';
+      if (conditions.windSpeed >= 5 && conditions.windSpeed <= 15) { wCls = 'cond-good'; wNote = 'Ideal'; }
+      else if (conditions.windSpeed > 20) { wCls = 'cond-bad'; wNote = 'Strong'; }
+      else if (conditions.windSpeed < 3) { wCls = 'cond-neutral'; wNote = 'Calm'; }
+      const dir = conditions.windDir != null ? ` ${windDirLabel(conditions.windDir)}` : '';
+      badges.push(`<span class="cond-pill ${wCls}"><span class="cond-icon">💨</span><span class="cond-text"><strong>${conditions.windSpeed.toFixed(0)} mph${dir}</strong> · ${wNote}</span></span>`);
+    }
+    badges.push(`<span class="cond-pill cond-neutral"><span class="cond-icon">${moonEmoji(moon.name)}</span><span class="cond-text"><strong>${moon.name}</strong> · ${moon.illumination}% lit</span></span>`);
+    if (conditions.waterTrend) {
+      const wtMap = {
+        rising:  { cls: 'cond-good',    icon: '📈', note: 'Rising' },
+        falling: { cls: 'cond-bad',     icon: '📉', note: 'Falling' },
+        stable:  { cls: 'cond-neutral', icon: '➡️', note: 'Stable' }
+      };
+      const wt = wtMap[conditions.waterTrend] || wtMap.stable;
+      badges.push(`<span class="cond-pill ${wt.cls}"><span class="cond-icon">${wt.icon}</span><span class="cond-text"><strong>Water</strong> · ${wt.note}</span></span>`);
+    }
+    if (conditions.rainLast3Days != null) {
+      let rCls = 'cond-neutral', rNote = 'Dry';
+      if (conditions.rainLast3Days > 0 && conditions.rainLast3Days <= 2) { rCls = 'cond-good'; rNote = 'Light recent'; }
+      else if (conditions.rainLast3Days > 2) { rCls = 'cond-neutral'; rNote = 'Wet'; }
+      badges.push(`<span class="cond-pill ${rCls}"><span class="cond-icon">🌧️</span><span class="cond-text"><strong>${conditions.rainLast3Days.toFixed(2)}″</strong> · ${rNote} (3d)</span></span>`);
+    }
+    fishingConditionsEl.innerHTML = hasWeather || conditions.waterTrend
+      ? badges.join('')
+      : '<span class="cond-pill cond-neutral">Conditions unavailable</span>';
+
+    // Solunar windows
+    const sol = getSolunarPeriods(new Date());
+    fishingWindowsEl.innerHTML = `
+      <div class="fw-row">
+        <span class="fw-label">Major bites</span>
+        <span class="fw-times">${sol.major.map(w => `${w.start}–${w.end}`).join(' &nbsp;·&nbsp; ')}</span>
+      </div>
+      <div class="fw-row">
+        <span class="fw-label">Minor bites</span>
+        <span class="fw-times">${sol.minor.map(w => `${w.start}–${w.end}`).join(' &nbsp;·&nbsp; ')}</span>
+      </div>
+    `;
+
+    // Species cards
+    fishingSpeciesEl.innerHTML = FISH_SPECIES.map(sp => {
+      const s = sp.seasons[season] || sp.seasons.spring;
+      return `
+        <div class="species-card">
+          <div class="species-head">
+            <span class="species-icon">${sp.icon}</span>
+            <span class="species-name">${sp.name}</span>
+          </div>
+          ${activityBar(s.activity)}
+          <div class="species-meta"><span class="meta-key">Depth</span> ${s.depth}</div>
+          <div class="species-tech">${s.technique}</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function windDirLabel(deg) {
+    const dirs = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
+    return dirs[Math.round(((deg % 360) / 22.5)) % 16];
+  }
+
+  async function loadFishingWeather() {
+    const url = 'https://api.open-meteo.com/v1/forecast?latitude=36.6246&longitude=-78.5578' +
+      '&current=surface_pressure,wind_speed_10m,wind_direction_10m' +
+      '&daily=precipitation_sum&past_days=3&forecast_days=1' +
+      '&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch' +
+      '&timezone=America/New_York';
+    try {
+      return await fetchJSON(url);
+    } catch (err) {
+      console.warn('Fishing weather fetch failed', err);
+      return null;
+    }
+  }
+
+
   async function loadAll() {
     refreshBtn.classList.add('spinning');
     try {
@@ -554,6 +843,42 @@
       renderComparisons(latest, lastYearLatest);
       renderRamps(latest);
       renderChart(h30);
+
+      // ---- Fishing report ----
+      let waterTrend = null;
+      if (latest && h7 && h7.length > 1) {
+        const target = latest.time.getTime() - 24 * 3600 * 1000;
+        let best = h7[0];
+        let bestDiff = Math.abs(h7[0].time.getTime() - target);
+        for (const p of h7) {
+          const d = Math.abs(p.time.getTime() - target);
+          if (d < bestDiff) { bestDiff = d; best = p; }
+        }
+        const hoursApart = (latest.time.getTime() - best.time.getTime()) / 3600000;
+        if (hoursApart > 0) {
+          const rate = (latest.value - best.value) * (24 / hoursApart);
+          if (rate > 0.05) waterTrend = 'rising';
+          else if (rate < -0.05) waterTrend = 'falling';
+          else waterTrend = 'stable';
+        }
+      }
+
+      const fishingWx = await loadFishingWeather();
+      const cur = fishingWx?.current || {};
+      const dailyRain = fishingWx?.daily?.precipitation_sum || [];
+      const rainLast3 = dailyRain.length
+        ? dailyRain.slice(0, 3).reduce((a, b) => a + (Number(b) || 0), 0)
+        : null;
+
+      renderFishing({
+        pressure: cur.surface_pressure ?? null,
+        windSpeed: cur.wind_speed_10m ?? null,
+        windDir: cur.wind_direction_10m ?? null,
+        waterTrend,
+        rainLast3Days: rainLast3,
+        moon: getMoonPhase(new Date()),
+        season: seasonFor(new Date().getMonth() + 1)
+      });
 
       lastFetchTime = Date.now();
     } catch (err) {

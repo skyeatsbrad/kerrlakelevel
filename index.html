@@ -96,6 +96,32 @@
     </div>
   </section>
 
+  <!-- FISHING REPORT -->
+  <section class="card fishing-card">
+    <div class="card-header">
+      <h2>Fishing Report</h2>
+      <span class="sub">Auto-generated from current conditions</span>
+    </div>
+    <div class="fishing-overview">
+      <div class="fishing-rating" id="fishingRating">
+        <span class="fishing-stars">—</span>
+        <span class="fishing-label">Loading…</span>
+      </div>
+      <div class="fishing-conditions" id="fishingConditions"></div>
+    </div>
+    <div class="fishing-windows" id="fishingWindows"></div>
+    <details class="fishing-species-details">
+      <summary>
+        <span class="summary-title">
+          <h3>Species Breakdown</h3>
+          <span class="sub">Activity, depth &amp; techniques</span>
+        </span>
+        <span class="chev" aria-hidden="true">▾</span>
+      </summary>
+      <div class="fishing-species" id="fishingSpecies"></div>
+    </details>
+  </section>
+
   <!-- CHART + WEATHER ROW -->
   <div class="two-col-row">
     <section class="card chart-card">
@@ -185,6 +211,6 @@
 </footer>
 
 <script src="chart.min.js" defer></script>
-<script src="app.js?v=6" defer></script>
+<script src="app.js?v=7" defer></script>
 </body>
 </html>
