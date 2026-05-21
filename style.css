@@ -530,10 +530,12 @@ main > .card:nth-child(6) { animation-delay: 375ms; }
 }
 
 /* ---------- Chart ---------- */
+.chart-card { padding-bottom: 16px; }
+.chart-card .card-header { margin-bottom: 8px; }
 .chart-wrap {
   position: relative;
   width: 100%;
-  min-height: 240px;
+  min-height: 160px;
 }
 .chart-loading {
   position: absolute; inset: 0;
