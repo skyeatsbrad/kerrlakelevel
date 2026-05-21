@@ -739,3 +739,45 @@ main > .card:nth-child(6) { animation-delay: 375ms; }
 .refresh-btn:focus-visible {
   outline-offset: 4px;
 }
+
+/* ---------- Webcams ---------- */
+.webcam-card .card-header { margin-bottom: 20px; }
+
+.webcam-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .webcam-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.webcam-item h3 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+  letter-spacing: 0.02em;
+}
+
+.webcam-frame {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 */
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--bg-base);
+  border: 1px solid var(--border-subtle);
+}
+
+.webcam-frame iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
